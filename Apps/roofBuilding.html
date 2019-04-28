@@ -87,20 +87,33 @@ top: -50px;
   <div id="cesiumContainer"></div>
   <div class="toolbar-left">
     <button class="btn btn-success" onclick="correct();">Correct</button>
-    <button class="btn btn-danger" onclick="falsee();">False</button><br><br>
+    <button  id="myBtn" class="btn btn-danger" onclick="falsee();">False</button><br><br>
     <button class="btn btn-primary" style="width: 140px;"onclick="next();">Next</button>
     <!-- Trigger/Open The Modal -->
-    <button id="myBtn">Open Modal</button>
+    <!-- <button id="myBtn">Open Modal</button> -->
 
     <!-- The Modal -->
     <div id="myModal" class="modal">
 
       <!-- Modal content -->
       <div class="modal-content">
-        <span class="close">&times;</span>
-        <p>Some text in the Modal..</p>
-      </div>
+        <span class="close" style= "color:black;background-color:black">&times;</span>
+        <h3>Your Feedback about the selected entiy class</h3>
+          <div>
+            <p>In your opinion what is wrong with the roof type? </p>
+            <textarea placeholder="Write your feedback here..." rows="4" cols="50">
+            </textarea>
+         </div><br><br>
+          <div>
+            <p>What could be changed/modified for the selected roof? </p>
+            <input type="checkbox" name="vehicle1" value="Height"> Height<br>
+            <input type="checkbox" name="vehicle2" value="Position"> Position<br>
+            <input type="checkbox" name="vehicle3" value="Class type" >Class type<br><br>
+            <button class="btn btn-primary" onclick="hideModel();">Submit</button>
 
+          </div>
+
+    </div>
     </div>
 </div>
 

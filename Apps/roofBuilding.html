@@ -85,31 +85,75 @@ top: -50px;
 </head>
 <body>
   <div id="cesiumContainer"></div>
-  <div class="toolbar-left">
+  <div class="toolbar-left" id="leftToolbar" style="display:none">
     <button class="btn btn-success" onclick="correct();">Correct</button>
-    <button  id="myBtn" class="btn btn-danger" onclick="falsee();">False</button><br><br>
+    <button  id="falseBtn" class="btn btn-danger" onclick="falsee();">False</button><br><br>
     <button class="btn btn-primary" style="width: 140px;"onclick="next();">Next</button>
-    <!-- Trigger/Open The Modal -->
-    <!-- <button id="myBtn">Open Modal</button> -->
+    <div class="alert alert-success alert-dismissible" id="successAlert"  style="display:none;position: relative;bottom: 90px;left: 440px;">
+      <strong>The selected building class saved as correct!</strong>
+      <button type="button" class="btn btn-secondary" onclick="closealert('successAlert');">Ok</button>
+    </div>
+    <input type="checkbox"  value="points" id="points"  onclick="aha(false)"> <label> Show points cloud  </label>
 
-    <!-- The Modal -->
+    <!-- The False Modal -->
     <div id="myModal" class="modal">
 
       <!-- Modal content -->
       <div class="modal-content">
-        <span class="close" style= "color:black;background-color:black">&times;</span>
+        <span class="close" style= "color: black;opacity: 1;">&times;</span>
         <h3>Your Feedback about the selected entiy class</h3>
+
           <div>
-            <p>In your opinion what is wrong with the roof type? </p>
-            <textarea placeholder="Write your feedback here..." rows="4" cols="50">
-            </textarea>
-         </div><br><br>
-          <div>
+            <div class="form-row">
+
+
             <p>What could be changed/modified for the selected roof? </p>
-            <input type="checkbox" name="vehicle1" value="Height"> Height<br>
-            <input type="checkbox" name="vehicle2" value="Position"> Position<br>
-            <input type="checkbox" name="vehicle3" value="Class type" >Class type<br><br>
-            <button class="btn btn-primary" onclick="hideModel();">Submit</button>
+            <input type="checkbox"  value="Height" id="height"  onclick="ShowInput('height','showheight')"> <label> Height  </label>
+            <div  id="showheight" style="display:none;padding-left: 2px;">
+              <div class="col-md-6" style=" display: flex; ">
+                <label style="font-weight: 500; margin-top: 6px;padding-right: 10px;"> Higher:  </label>  <input type="text"  class="form-control"  placeholder="Height in meter">
+              </div>
+              <div class="col-md-6" style=" display: flex; ">
+                <label style="font-weight: 500; margin-top: 6px;padding-right: 10px;"> Lower:  </label>  <input type="text"  class="form-control"  placeholder="Height in meter">
+              </div>
+            </div>
+            <br>
+            <input type="checkbox"  value="Location" id="location"  onclick="ShowInput('location','showloc')"> <label> Location  </label>
+            <div  id="showloc" style="display:none;padding-left: 2px;">
+              <div class="col-md-6" style=" display: flex; ">
+                <label style="font-weight: 500; margin-top: 6px;padding-right: 10px;"> Latitude:  </label>  <input type="text"  class="form-control"  >
+              </div>
+              <div class="col-md-6" style=" display: flex; ">
+                <label style="font-weight: 500; margin-top: 6px;padding-right: 10px;"> Longitude:  </label>  <input type="text"  class="form-control"  >
+              </div>
+            </div>
+            <br>
+            <input type="checkbox"  value="class" id="class"  onclick="ShowInput('class','showclass')"> <label> Roof Class Type  </label>
+            <div  id="showclass" style="display:none;padding-left: 2px;">
+                <div class="col-md-6" style=" display: flex; ">
+                  <label style="font-weight: 500; margin-top: 6px;padding-right: 10px;"for="sel1">Select suggested class type: </label>
+                 <select class="form-control" id="sel1" style="    margin-top: 13px;">
+                   <option>Pyramid roof</option>
+                   <option>One-sided hip roof</option>
+                   <option>Saddleback roof</option>
+                   <option>Flat</option>
+                 </select>
+                </div>
+            </div>
+            <br><br>
+            <br><br>
+            <div>
+              <p>Other suggestions? </p>
+              <textarea placeholder="Write your feedback here..." rows="4" cols="50">
+              </textarea>
+           </div>
+
+           <div class="modal-footer" style="position: absolute; bottom: 0px;right: 0;">
+             <button class="btn btn-primary" onclick="hideModel();">Edit Mode</button>
+             <button class="btn btn-primary" onclick="hideModel();">Submit</button>
+           </div>
+
+         </div>
 
           </div>
 

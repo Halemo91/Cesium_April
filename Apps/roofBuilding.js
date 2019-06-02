@@ -1,19 +1,34 @@
 // this file loads the geojson files that are created after creating kml from geoserver thne using online convertor
 // to convert kml to geojson.
-
+var array = [];
+var count = 0 ;
+var dataSources = [];
 var viewer = new Cesium.Viewer("cesiumContainer", {
   navigationHelpButton: false,
   animation: false,
-  timeline: false
+  timeline: false,
+  sceneModePicker: false,
+  baseLayerPicker: false
+
+
+
 });
-var insetViewer = new Cesium.Viewer("insetCesiumContainer", {
+var twoDView = new Cesium.Viewer("insetCesiumContainer", {
   navigationHelpButton: false,
   animation: false,
-  timeline: false
+  timeline: false,
+  navigationInstructionsInitiallyVisible: false,
+  selectionIndicator: false,
+  sceneModePicker: false,
+  infoBox:false,
+  homeButton: false,
+  geocoder: false,
+  fullscreenButton: false,
+  baseLayerPicker: false
 });
 
 // Make the inset window display in 2D, to show it's different.
-//insetViewer.scene.morphTo2D(0);
+//twoDView.scene.morphTo2D(0);
 
 var initialPosition = Cesium.Cartesian3.fromDegrees(
   -73.897766864199923,
@@ -25,22 +40,27 @@ var initialOrientation = new Cesium.HeadingPitchRoll.fromDegrees(
   -21.34390550872461,
   0.0716951918898415
 );
-var camerView = insetViewer.scene.camera.setView({
+var camerView = twoDView.scene.camera.setView({
   destination: initialPosition,
   orientation: initialOrientation,
   endTransform: Cesium.Matrix4.IDENTITY
 });
 
-var array = [];
-var count = 0 ;
-var promise = Cesium.GeoJsonDataSource.load("point_cloud.geojson", {
-  stroke: Cesium.Color.BLACK.withAlpha(1.5),
+var promise = Cesium.GeoJsonDataSource.load(
+"sattawat-myBuildings_polygon.geojson", {
+  stroke: Cesium.Color.YELLOW.withAlpha(1.5),
+  strokeWidth: 33,
   markerSize: 10,
-  markerColor: Cesium.Color.BLACK
-});
+  markerColor: Cesium.Color.YELLOW
+}
+);
 promise.then(function(dataSource) {
-  insetViewer.dataSources.add(dataSource);
+  twoDView.dataSources.add(dataSource);
+  console.log('aaaaaaaaaaaaaaaa',dataSource)
+  dataSources.push(dataSource)
   viewer.dataSources.add(dataSource);
+
+
 
   var entities = dataSource.entities.values;
   array = entities;
@@ -49,33 +69,37 @@ promise.then(function(dataSource) {
   for (var i = 0; i < entities.length; i++) {
     var entity = entities[i];
     console.log(entity);
-    insetViewer.zoomTo(entities[entities.length-1]);
+    twoDView.zoomTo(entities[entities.length-1]);
     viewer.zoomTo(entities[entities.length-1]);
 
     //Extrude the polygon based on any attribute you desire
     entity.polygon.extrudedHeight = 100000.0;
   }
-  if (insetViewer.dataSources.contains(dataSource)) {
-    insetViewer.dataSources.remove(dataSource);
+  if (twoDView.dataSources.contains(dataSource)) {
+console.log('1111111111111')
+    twoDView.dataSources.remove(dataSource);
   }
 });
-
-viewer.dataSources.add(
-  Cesium.GeoJsonDataSource.load("sattawat-myBuildings_polygon.geojson", {
-    stroke: Cesium.Color.YELLOW.withAlpha(1.5),
-    strokeWidth: 33,
-    markerSize: 10,
-    markerColor: Cesium.Color.YELLOW
-  })
-);
-
-function correct() {
-  alert("The selected building class saved as correct!");
-  console.log(array);
+function aha(aha) {
+  console.log('2222222222222222',dataSources)
+  viewer.dataSources.add(
+    Cesium.GeoJsonDataSource.load("point_cloud.geojson", {
+      stroke: Cesium.Color.BLACK.withAlpha(1.5),
+      markerSize: 10,
+      markerColor: Cesium.Color.BLACK
+    })
+  );
 
 }
+
+
+function correct() {
+  //alert("The selected building class saved as correct!");
+  console.log(array);
+  var alert = document.getElementById("successAlert");
+    alert.style.display = "block";
+}
 function falsee() {
-  alert("The selected building class saved as false!");
 //TODO: try to get the right positon of an selected enitity,
 //and see this for moving entitiy: https://groups.google.com/forum/#!topic/cesium-dev/3OM1_FIChS0
 // https://cesium.com/blog/2016/03/21/drawing-on-the-globe-and-3d-models/
@@ -177,12 +201,18 @@ handler.setInputAction(function(movement) {
 }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
 
  viewer.zoomTo(orangePolygon);
-} // end of false
+} //***************************** end of false
 
 var scene = viewer.scene;
 viewer.selectedEntityChanged.addEventListener(function(entity) {
     // Check if an entity with a point color was selected.
     console.log('sssssssssss',entity)
+    var buttons = document.getElementById("leftToolbar");
+    if (entity){
+      buttons.style.display = "block";
+    } else {
+       buttons.style.display = "none";
+    }
     if (Cesium.defined(entity) &&
         Cesium.defined(entity.point) &&
         Cesium.defined(entity.point.color)) {
@@ -206,16 +236,16 @@ viewer.selectedEntityChanged.addEventListener(function(entity) {
 
 function next() {
   count += 100;
-  console.log(count);
+  console.log(array);
   //TODO (count % 10)
   viewer.zoomTo(array[count]);
-  insetViewer.zoomTo(array[count]);
+  twoDView.zoomTo(array[count]);
 }
 // Get the modal
 var modal = document.getElementById('myModal');
 
 // Get the button that opens the modal
-var btn = document.getElementById("myBtn");
+var btn = document.getElementById("falseBtn");
 
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
@@ -239,4 +269,16 @@ window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
   }
+}
+function ShowInput(checkBox,inputToShow) {
+  var checkBox = document.getElementById(checkBox);
+  var text = document.getElementById(inputToShow);
+  if (checkBox.checked == true){
+    text.style.display = "block";
+  } else {
+     text.style.display = "none";
+  }
+}
+function closealert(element) {
+document.getElementById(element).style.display = "none";
 }

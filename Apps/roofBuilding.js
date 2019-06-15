@@ -80,8 +80,7 @@ console.log('1111111111111')
     twoDView.dataSources.remove(dataSource);
   }
 });
-function aha(aha) {
-  console.log('2222222222222222',dataSources)
+function showPointsCloud() {
   viewer.dataSources.add(
     Cesium.GeoJsonDataSource.load("point_cloud.geojson", {
       stroke: Cesium.Color.BLACK.withAlpha(1.5),
